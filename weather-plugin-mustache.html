@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></link>
+<style>
+body { padding:20px; }
+
+.box { background-color:#dadada; padding:20px; margin:20px; }
+
+.weather1 {
+margin:20px;
+padding:20px; 
+background-color:#6699ff; 
+border:1px solid #3377ff; 
+width:400px; font-family:verdana; 
+text-align:center;
+font-size:18px;
+color:#fff;
+ }
+ 
+ .weather-detail1 {
+margin:20px;
+padding:20px; 
+background-color:#ccdcff; 
+border:1px solid #99bbff; 
+width:700px; font-family:verdana; 
+text-align:center;
+font-size:18px;
+color:#1a66ff;
+clear:both;
+height:100%;
+ }
+ 
+ .weather::before {
+    content: "\f017 -";
+	font-size:22px;
+    font-family:'weathericons';
+}
+.float-left {float:left; }
+.box-tp {margin:10px; padding:5px; width:45%;}
+</style>
+<script>
+$(document).ready(function(){
+        /* -setting-up openweathermap url- */ 
+        var zip = "60195";
+		var apikey = "6f0cecd92e38d7e59f5b0aa9b0212f74";
+		var url1 = "http://api.openweathermap.org/data/2.5/weather";
+		var url = url1 + "?" + "zip="+zip + "&" + "appid=" + apikey;
+		
+		/* - getting the data fron openweathermap API- */ 
+        $.getJSON(url, function(result){
+                 var data = {
+				 city:result.name,
+                 dt : result.dt, 
+                 id : result.id,
+                 temp : result.main.temp,
+				 icon : result.main.temp,
+				 
+				 humidity : result.main.humidity,
+				 temp_min : result.main.temp_min,
+				 temp_max : result.main.temp_max,
+				 
+				 wind : result.wind.speed,
+				 
+				 country : result.sys.country,
+				 sunrise : result.sys.sunrise,
+				 sunset : result.sys.sunset
+				 };
+				 
+				/* -small ticker- */ 
+               // $("#weather1").append(  city +  " - " +  temp  + " F");
+			   var template = "<b>{{city}} | {{temp}} </b>";
+			   var html = Mustache.to_html(template, data);
+			   $('#weather1').html(html);
+			 
+			 	/* -detail infor regular html template- */ 
+				/* 
+				$("#weather-detail1").append(  
+				"<h3>" + city + " | " +country + "</h3>" + 
+				"<br>" +  "Temperature :" + temp  + " F" + "<br>"  +
+				"Humidity :" + humidity + "<br>" + 
+				"Min Temperature :" + temp_min + 
+				"<br>" + "Max Temperature :" + 
+				temp_max +"<br>" + 
+				"Wind :" + wind 
+				);
+				*/
+			   /* -detail infor MustachJS html template- */ 	
+			   var detailTemplated = "<h3>{{city}} | {{country}}</h3><div class='float-left box-tp'>Temperature : {{temp}} F <br>Min Temperature : {{temp_min}}</div><div class='float-left box-tp'>Humidity :{{humidity}} <br>Max Temperature : {{temp_max}}</div><br clear='both'>";
+			   var detailHtml = Mustache.to_html(detailTemplated, data);
+			   $('#weather-detail1').html(detailHtml);
+
+        });
+
+   
+});
+</script>
+</head>
+<body>
+<div class="box">
+<h2>JQuery Weather Plugin uisng MustachJS Template</h2>
+<h4>Getting data from openweather map and build plugin using Jquery, Bootstrap, MustachJS</h4>
+</div>
+</br>
+<div id="weather1" class="weather1"></div>
+<div id="weather-detail1" class="weather-detail1" >
+
+
+<br/>
+</div>
+
+</body>
+</html>
